@@ -65,7 +65,7 @@ object Comment {
     val accuracy = predictionAndLabel.filter( x => if (x._1 == x._2) true else false ).count() / test.count()
 
     println(NBmodel.predict(hashingTF.transform(cut("这是垃圾烂片啊"))) )
-    println(NBmodel.predict(hashingTF.transform(cut("很不错的片子"))) )
+    println(NBmodel.predict(hashingTF.transform(cut("很好的电影啊"))) )
 
   }
 
