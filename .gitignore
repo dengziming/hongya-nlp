@@ -7,5 +7,5 @@
 *.iml
 out
 gen
-analyzer/target/
+target
 

@@ -20,14 +20,20 @@ import scala.collection.mutable.ArrayBuffer
 object RunLSA {
   def main(args: Array[String]): Unit = {
 
-    val k = if (args.length > 0) args(0).toInt else 100
-    val numTerms = if (args.length > 1) args(1).toInt else 20000
+    if (args.length < 1){
+      System.err.println("usage : inpath [k,numTerms]")
+      System.exit(1)
+    }
+
+    val path = args(0)
+    val k = if (args.length > 1) args(0).toInt else 100
+    val numTerms = if (args.length > 2) args(1).toInt else 20000
 
     val spark = SparkSession.builder().config("spark.serializer", classOf[KryoSerializer].getName).getOrCreate()
     val assembleMatrix = new AssembleDocumentTermMatrix(spark)
     import assembleMatrix._
 
-    val docTexts: Dataset[(String, String)] = parseWikipediaDump("")
+    val docTexts: Dataset[(String, String)] = parseWikipediaDump(path)
 
     val (docTermMatrix, termIds, docIds, termIdfs) = documentTermMatrix(docTexts, "stopwords.txt", numTerms)
 

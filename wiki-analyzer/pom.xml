@@ -22,10 +22,12 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.11</artifactId>
             <version>2.1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-mllib_2.11</artifactId>
+            <scope>provided</scope>
             <version>2.1.0</version>
         </dependency>
 
@@ -69,6 +71,59 @@
                 <directory>src/main/resources/${package.environment}</directory>
             </resource>
         </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>
+                                shade
+                            </goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <!--<minimizeJar>true</minimizeJar>-->
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <!--<shadedClassifierName>fat</shadedClassifierName>-->
+
+                    <relocations>
+                        <relocation>
+                            <pattern>com.google</pattern>
+                            <shadedPattern>shaded.guava</shadedPattern>
+                            <includes>
+                                <include>com.google.**</include>
+                            </includes>
+
+                            <excludes>
+                                <exclude>com.google.common.base.Optional</exclude>
+                                <exclude>com.google.common.base.Absent</exclude>
+                                <exclude>com.google.common.base.Present</exclude>
+                            </excludes>
+                        </relocation>
+                    </relocations>
+
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+
+                </configuration>
+            </plugin>
+
+        </plugins>
     </build>
 
 </project>
