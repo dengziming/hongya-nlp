@@ -13,5 +13,11 @@
         <module>wiki-analyzer</module>
     </modules>
 
+    <properties>
+
+        <scala.version>2.11.12</scala.version>
+        <spark.version>2.2.0</spark.version>
+    </properties>
+
 
 </project>
